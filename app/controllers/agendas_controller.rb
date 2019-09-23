@@ -26,7 +26,7 @@ class AgendasController < ApplicationController
   def destroy
     #binding.pry
     if @agenda.destroy
-      DeleteMailer.delete_mail(@agenda, @email).deliver
+      DeleteMailer.delete_mail(@agenda).deliver
       redirect_to dashboard_url, notice: "削除しました"
     end
   end

@@ -1,7 +1,7 @@
 class DeleteMailer < ApplicationMailer
   default from: 'from@example.com'
 
-  def delete_mail(agenda,email)
+  def delete_mail(agenda)
     @agenda = agenda
     #binding.pry
     @member = @agenda.team.members
