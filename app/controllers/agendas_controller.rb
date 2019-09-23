@@ -1,5 +1,7 @@
 class AgendasController < ApplicationController
-  # before_action :set_agenda, only: %i[show edit update destroy]
+   #before_action :set_agenda, only: %i[show edit update destroy]
+   before_action :set_agenda, only:[:destroy]
+   before_action :permit_destroy, only:[:destroy]
 
   def index
     @agendas = Agenda.all
@@ -21,6 +23,11 @@ class AgendasController < ApplicationController
     end
   end
 
+  def destroy
+    @agenda.destroy
+    redirect_to dashboard_path, notice: "削除しました"
+  end
+
   private
 
   def set_agenda
@@ -29,5 +36,12 @@ class AgendasController < ApplicationController
 
   def agenda_params
     params.fetch(:agenda, {}).permit %i[title description]
+  end
+
+  def permit_destroy
+    @agenda = Agenda.find(params[:id])
+    #binding.pry
+    redirect_to dashboard_path, notice:"権限がありません" unless @current_user.id == @agenda.team.owner_id || @current_user.id == @agenda.user_id
+
   end
 end
