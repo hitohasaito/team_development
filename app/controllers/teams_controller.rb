@@ -34,6 +34,7 @@ class TeamsController < ApplicationController
     if @team.update(team_params)
         if params[:owner_id]
          @team.update(owner_id:params[:owner_id])
+         ShiftAdminMailer.shift_admin_mail(@team).deliver
        end
       redirect_to @team, notice: 'チーム更新に成功しました！'
     else
