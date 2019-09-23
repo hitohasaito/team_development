@@ -24,8 +24,11 @@ class AgendasController < ApplicationController
   end
 
   def destroy
-    @agenda.destroy
-    redirect_to dashboard_path, notice: "削除しました"
+    #binding.pry
+    if @agenda.destroy
+      DeleteMailer.delete_mail(@agenda, @email).deliver
+      redirect_to dashboard_url, notice: "削除しました"
+    end
   end
 
   private
@@ -42,6 +45,5 @@ class AgendasController < ApplicationController
     @agenda = Agenda.find(params[:id])
     #binding.pry
     redirect_to dashboard_path, notice:"権限がありません" unless @current_user.id == @agenda.team.owner_id || @current_user.id == @agenda.user_id
-
   end
 end
