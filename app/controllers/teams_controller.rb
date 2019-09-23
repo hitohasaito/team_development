@@ -30,7 +30,11 @@ class TeamsController < ApplicationController
   end
 
   def update
+    #binding.pry
     if @team.update(team_params)
+        if params[:owner_id]
+         @team.update(owner_id:params[:owner_id])
+       end
       redirect_to @team, notice: 'チーム更新に成功しました！'
     else
       flash.now[:error] = '保存に失敗しました、、'
