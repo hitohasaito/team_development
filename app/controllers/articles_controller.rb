@@ -32,7 +32,7 @@ class ArticlesController < ApplicationController
     if article.save
       redirect_to article_url(article), notice: '記事作成に成功しました！'
     else
-      render :new
+      redirect_to new_agenda_article_path(agenda)
     end
   end
 
