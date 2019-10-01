@@ -3,10 +3,8 @@ class DeleteMailer < ApplicationMailer
 
   def delete_mail(agenda)
     @agenda = agenda
-    #binding.pry
-    @member = @agenda.team.members
-    @email = @member.select(:email)
-
+    @email = @agenda.team.members.pluck(:email)
+    
     mail to: @email, subject: 'アジェンダが削除されました'
   end
 end
