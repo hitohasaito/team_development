@@ -62,10 +62,9 @@ class TeamsController < ApplicationController
   def team_params
     params.fetch(:team, {}).permit %i[name icon icon_cache owner_id keep_team_id]
   end
+
   def admin_owner
-      flash[:notice] = "権限がありません"
-      render "show"
-      unless current_user.id == @team.owner_id
-    end
+    #binding.pry
+    render :show unless current_user.id == @team.owner.id
   end
 end
