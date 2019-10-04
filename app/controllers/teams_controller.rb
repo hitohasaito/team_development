@@ -1,6 +1,7 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_team, only: %i[show edit update destroy]
+  before_action :admin_owner, only: [:update]
 
   def index
     @teams = Team.all
@@ -30,7 +31,12 @@ class TeamsController < ApplicationController
   end
 
   def update
+    #binding.pry
     if @team.update(team_params)
+        if params[:owner_id]
+         @team.update(owner_id:params[:owner_id])
+         ShiftAdminMailer.shift_admin_mail(@team).deliver
+       end
       redirect_to @team, notice: 'チーム更新に成功しました！'
     else
       flash.now[:error] = '保存に失敗しました、、'
@@ -55,5 +61,13 @@ class TeamsController < ApplicationController
 
   def team_params
     params.fetch(:team, {}).permit %i[name icon icon_cache owner_id keep_team_id]
+  end
+
+  def admin_owner
+    #binding.pry
+    unless current_user.id == @team.owner.id
+      flash.now[:notice]='権限がありません'
+      render :show
+    end
   end
 end
