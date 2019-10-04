@@ -65,6 +65,9 @@ class TeamsController < ApplicationController
 
   def admin_owner
     #binding.pry
-    render :show unless current_user.id == @team.owner.id
+    unless current_user.id == @team.owner.id
+      flash.now[:notice]='権限がありません'
+      render :show
+    end
   end
 end
